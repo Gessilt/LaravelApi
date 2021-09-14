@@ -1,5 +1,8 @@
 ### Create a simple API with laravel 8 
 
+Remember the study of laravel in my profile. I will use some terms and method here. 
+Give a look on my project: https://github.com/Gessilt/Lavarel-study. Thanks.
+
 # What is API? 
 
 Aplication Programmimg Interface, a algorithms (set of routines and standards) establiished by a software.

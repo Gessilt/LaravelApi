@@ -29,6 +29,139 @@ Representational State Transfer, a framework, which define restrictions to web s
   - The hypermidia must be integrated. To user see what he can do.
 - It needs a layer that organizes the servers, with all their functions, involved in retrieving requested information.
 
+# Create 
+
+## The project in laravel:
+
+``` composer create-project laravel/laravel example-app ```bash
+
+A new database, in the case of this project, "artigos" or "articles" - on english - , the project is using MySql workbench.
+
+## Migration:
+
+``` php artisan make:migration create_artigos_table --create=artigos ```bash
+
+The --create=artigos will change the Schema name automatically. 
+
+Like: ``` Schema::create('artigos', function (Blueprint $table) { ```
+
+Go to new folder, enter in the migration archive, and create two new columns, a string "titulo" or "title"
+and a text "conteudo" or "content".
+
+## Model
+
+Create it normally, ```php artisan make:model Artigo```, don't forget migrate the data to the new model. 
+
+## Controller
+
+``` php artisan make:controller ArtigoController --resource ```bash
+
+The --resource make automatically methods with HTTP verbs.
+
+# Working
+
+
+## Build the resource
+
+A new thing, i've never seen this before the crate of this API. 
+What is? 
+
+The resource make the communication between the JSON data and the eloquent models, transform the JSON object in arrays and the arrays in JSON objects. Now, it's more simplest, don't you think?
+
+### Artisan command
+
+Execute it
+
+### Inside resource 
+
+```<?php
+
+namespace App\Http\Resources;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class Artigo extends JsonResource {
+  public function toArray($request){
+    //return parent::toArray($request);
+    return [
+      'id' => $this->id,
+      'titulo' => $this->titulo,
+      'conteudo' => $this->conteudo
+    ];
+  }
+
+  /* public function with( $request ){
+    return [
+      'version' => '1.0.0',
+      'author_url' => url('https://terminalroot.com.br')
+    ];
+  } */
+}
+```bash
+
+Why "$this"?? It references to it own class? But where is the attributes? 
+The resource make it simple. $this reference to the modal which is correspondent of this resource. 
+
+Ok, but how works? If you call it with the modal, regardless of what it is, in the controller it will execute and call the resource.
+Pay attention to the data specified in the resource, if it is a resource other than the class, it will give an error or will not work as expected. 
+
+## Build the controller
+
+Take a look in the methods names, They are all in the convention for HTTP verbs
+
+```
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Artigo as Artigo;
+use App\Http\Resources\Artigo as ArtigoResource;
+use Illuminate\Http\Request;
+
+class ArtigoController extends Controller {
+
+  public function index(){
+    $artigos = Artigo::paginate(15);
+    return ArtigoResource::collection($artigos);
+  }
+
+  public function show($id){
+    $artigo = Artigo::findOrFail( $id );
+    return new ArtigoResource( $artigo );
+  }
+
+  public function store(Request $request){
+    $artigo = new Artigo;
+    $artigo->titulo = $request->input('titulo');
+    $artigo->conteudo = $request->input('conteudo');
+
+    if( $artigo->save() ){
+      return new ArtigoResource( $artigo );
+    }
+  }
+
+   public function update(Request $request){
+    $artigo = Artigo::findOrFail( $request->id );
+    $artigo->titulo = $request->input('titulo');
+    $artigo->conteudo = $request->input('conteudo');
+
+    if( $artigo->save() ){
+      return new ArtigoResource( $artigo );
+    }
+  } 
+
+  public function destroy($id){
+    $artigo = Artigo::findOrFail( $id );
+    if( $artigo->delete() ){
+      return new ArtigoResource( $artigo );
+    }
+
+  }
+}
+```bash
+
+
+
+
 To run it, you will need start the laravel by 
 
 ```bash

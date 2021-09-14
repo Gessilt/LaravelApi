@@ -39,7 +39,9 @@ A new database, in the case of this project, "artigos" or "articles" - on englis
 
 ## Migration:
 
-``` php artisan make:migration create_artigos_table --create=artigos ```bash
+``` 
+php artisan make:migration create_artigos_table --create=artigos 
+```bash
 
 The --create=artigos will change the Schema name automatically. 
 
@@ -74,7 +76,8 @@ Execute it
 
 ### Inside resource 
 
-```<?php
+```
+<?php
 
 namespace App\Http\Resources;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -96,6 +99,7 @@ class Artigo extends JsonResource {
     ];
   } */
 }
+
 ```bash
 
 Why "$this"?? It references to it own class? But where is the attributes? 
@@ -157,6 +161,7 @@ class ArtigoController extends Controller {
 
   }
 }
+
 ```bash
 
 

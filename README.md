@@ -33,19 +33,22 @@ Representational State Transfer, a framework, which define restrictions to web s
 
 ## The project in laravel:
 
-``` composer create-project laravel/laravel example-app ```bash
+```bash 
+composer create-project laravel/laravel example-app 
+
+```
 
 A new database, in the case of this project, "artigos" or "articles" - on english - , the project is using MySql workbench.
 
 ## Migration:
 
-``` 
+```bash 
 php artisan make:migration create_artigos_table --create=artigos 
-```bash
+```
 
 The --create=artigos will change the Schema name automatically. 
 
-Like: ``` Schema::create('artigos', function (Blueprint $table) { ```
+Like: ```bash Schema::create('artigos', function (Blueprint $table) { ```
 
 Go to new folder, enter in the migration archive, and create two new columns, a string "titulo" or "title"
 and a text "conteudo" or "content".
@@ -56,12 +59,42 @@ Create it normally, ```php artisan make:model Artigo```, don't forget migrate th
 
 ## Controller
 
-``` php artisan make:controller ArtigoController --resource ```bash
+```bash php artisan make:controller ArtigoController --resource ```
 
-The --resource make automatically methods with HTTP verbs.
+The ```bash --resource ``` make automatically methods with HTTP verbs.
 
 # Working
 
+## Build routes
+
+Take a look in the name of route, is conventional to HTTP verbs.
+
+```bash
+<?php
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ArtigoController;
+
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+// List artigos
+Route::get('artigos', [ArtigoController::class, 'index']);
+
+// List single artigo
+Route::get('artigo/{id}', [ArtigoController::class, 'show']);
+
+// Create new artigo
+Route::post('artigo', [ArtigoController::class, 'store']);
+
+// Update artigo
+Route::put('artigo/{id}', [ArtigoController::class, 'update']);
+
+// Delete artigo
+Route::delete('artigo/{id}', [ArtigoController::class,'destroy']);
+
+```
 
 ## Build the resource
 
@@ -76,7 +109,7 @@ Execute it
 
 ### Inside resource 
 
-```
+```bash
 <?php
 
 namespace App\Http\Resources;
@@ -100,7 +133,7 @@ class Artigo extends JsonResource {
   } */
 }
 
-```bash
+```
 
 Why "$this"?? It references to it own class? But where is the attributes? 
 The resource make it simple. $this reference to the modal which is correspondent of this resource. 
@@ -112,7 +145,7 @@ Pay attention to the data specified in the resource, if it is a resource other t
 
 Take a look in the methods names, They are all in the convention for HTTP verbs
 
-```
+```bash
 <?php
 
 namespace App\Http\Controllers;
@@ -161,16 +194,16 @@ class ArtigoController extends Controller {
 
   }
 }
+```
 
-```bash
+# End, now test it on POSTman 
 
-
-
-
-To run it, you will need start the laravel by 
+To run it, you will need start the laravel by:
 
 ```bash
 php artisan serve
 ```
 
-To use the api, put in your URL, localhost:127.0.0.1/api/xxxxx
+To use the api, put in your URL, localhost:127.0.0.1/api/methodname 
+
+

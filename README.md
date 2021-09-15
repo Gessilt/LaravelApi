@@ -196,7 +196,7 @@ class ArtigoController extends Controller {
 }
 ```
 
-# End, now test it on POSTman 
+# End, now test it.
 
 To run it, you will need start the laravel by:
 
